@@ -1,11 +1,18 @@
 import React from 'react';
 import './App.css';
-import Buscador from './components/Buscador';
+import Inicio from './components/Inicio';
+
+import { BrowserRouter, Route } from 'react-router-dom';
+import Layout from './components/Layout';
 
 function App() {
   return (
     <div className="App">
-      <Buscador />
+      <BrowserRouter>
+        <Layout>
+          <Route exact path='/' component={Inicio} />
+        </Layout>
+      </BrowserRouter>
     </div>
   );
 }

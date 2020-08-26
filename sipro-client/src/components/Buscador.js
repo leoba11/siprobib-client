@@ -70,7 +70,7 @@ export const Buscador = props => {
       }
 
     return (
-        <div>
+        <div >
             <FormControlLabel
                 control={
                     <Switch
@@ -130,7 +130,6 @@ export const Buscador = props => {
                         Buscar
                     </Button>
 
-                    {console.log(values.dateOfpublishing)}
                 </form>
                 : <form className={classes.container} noValidate autoComplete="off" onSubmit={handleSubmit}>
                     <TextField
