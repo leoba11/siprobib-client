@@ -1,7 +1,7 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -10,12 +10,14 @@ import Button from '@material-ui/core/Button';
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
+        fixed: 'true'
     },
     menuButton: {
         marginRight: theme.spacing(2),
     },
     title: {
         flexGrow: 1,
+        textAlign: 'left'
     },
     buttonText: {
         color: 'white',
@@ -28,19 +30,18 @@ const Navbar = () => {
     return (
         <div className={classes.root}>
             <AppBar color="secondary" position="static">
-                <Toolbar>                    
+                <Toolbar>
                     <Typography variant="h6" className={classes.title}>
                         SIPROBIB
                     </Typography>
+
                     <NavLink className={classes.buttonText} to='/'>
                         <Button color="inherit">Inicio</Button>
                     </NavLink>
-                    <NavLink className={classes.buttonText} to='/nosotros'>
-                        <Button color="inherit">Nosotros</Button>
+                    <NavLink className={classes.buttonText} to='/newSearcher'>
+                        <Button color="inherit">Buscador</Button>
                     </NavLink>
-                    <NavLink className={classes.buttonText} to='/contact'>
-                        <Button color="inherit">Contáctenos</Button>
-                    </NavLink>
+
                 </Toolbar>
             </AppBar>
         </div>

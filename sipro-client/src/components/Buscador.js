@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { Switch, TextField, FormControlLabel, Button } from '@material-ui/core';
+import React, {useState} from 'react';
+import {withStyles} from '@material-ui/core/styles';
+import {Switch, TextField, FormControlLabel, Button} from '@material-ui/core';
 
 const styles = theme => ({
 
@@ -33,7 +33,7 @@ const styles = theme => ({
 export const Buscador = props => {
 
     //For the styles
-    const { classes } = props;
+    const {classes} = props;
 
     //For the switch
     const [type, setType] = useState({
@@ -41,7 +41,7 @@ export const Buscador = props => {
     })
 
     const handleChange = (event) => {
-        setType({ ...type, [event.target.name]: event.target.checked });
+        setType({...type, [event.target.name]: event.target.checked});
     };
 
     //For the Form
@@ -56,7 +56,7 @@ export const Buscador = props => {
     const [search, setSearch] = useState('');
 
     const handleInputChange = e => {
-        const { name, value } = e.target
+        const {name, value} = e.target
         setValues({
             ...values,
             [name]: value
@@ -67,10 +67,11 @@ export const Buscador = props => {
         alert('Subido papa');
         console.log(values);
         event.preventDefault();
-      }
+    }
 
     return (
-        <div >
+        <div>
+
             <FormControlLabel
                 control={
                     <Switch
@@ -78,7 +79,7 @@ export const Buscador = props => {
                         onChange={handleChange}
                         color="primary"
                         name="checkedA"
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                        inputProps={{'aria-label': 'primary checkbox'}}
                     />
                 }
                 label='Busqueda Avanzada'
@@ -146,6 +147,7 @@ export const Buscador = props => {
                     </Button>
 
                 </form>}
+
         </div>
     )
 }
