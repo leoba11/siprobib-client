@@ -5,13 +5,12 @@ import {Formik, Form, Field} from "formik";
 import * as Yup from 'yup';
 
 //Imports de Material UI
-import {Button, FormControlLabel, Switch, TextField} from "@material-ui/core";
-import {withStyles} from "@material-ui/core";
+import {Button, FormControlLabel, Switch, TextField, makeStyles} from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 import TablaProducciones from "./TablaProducciones";
 
 //Estilos
-const styles = () => ({
+const styles = makeStyles( () => ({
     container: {
         display: 'grid',
         gridTemplateRows: 'repeat(2, 1fr)',
@@ -26,11 +25,11 @@ const styles = () => ({
     switchcito: {
         marginLeft: '2em'
     }
-})
+}));
 
 const NewSearcher = props => {
 
-    const {classes} = props;
+    const classes = styles();
 
     // Valores iniciales del formulario de busqueda.
     const initialValues = {
@@ -160,4 +159,4 @@ const NewSearcher = props => {
 }
 
 
-export default withStyles(styles)(NewSearcher);
+export default NewSearcher;
