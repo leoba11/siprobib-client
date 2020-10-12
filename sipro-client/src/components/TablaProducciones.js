@@ -8,7 +8,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import producciones from './produ';
 import ModalComponent from "./modalComponent";
 
 const columns = [
@@ -33,8 +32,9 @@ const useStyles = makeStyles({
 });
 
 
-const TablaProducciones = () => {
+const TablaProducciones = props => {
     const classes = useStyles();
+    
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -67,7 +67,7 @@ const TablaProducciones = () => {
                     </TableHead>
                     <TableBody>
                         {
-                            producciones.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map( row => {
+                            props.production.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map( row => {
                                 return (
                                         <TableRow hover role="checkbox" tabIndex={-1} key={row.idProduccion}>
                                             {columns.map(column => {
@@ -89,7 +89,7 @@ const TablaProducciones = () => {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={producciones.length}
+                count={props.production.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onChangePage={handleChangePage}

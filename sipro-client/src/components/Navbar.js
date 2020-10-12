@@ -38,7 +38,7 @@ const Navbar = () => {
                     <NavLink className={classes.buttonText} to='/'>
                         <Button color="inherit">Inicio</Button>
                     </NavLink>
-                    <NavLink className={classes.buttonText} to='/newSearcher'>
+                    <NavLink className={classes.buttonText} to='/buscador'>
                         <Button color="inherit">Buscador</Button>
                     </NavLink>
 

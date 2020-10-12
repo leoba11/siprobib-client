@@ -1,16 +1,22 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 //Imports para el form
 import {Formik, Form, Field} from "formik";
-import * as Yup from 'yup';
 
 //Imports de Material UI
 import {Button, FormControlLabel, Switch, TextField, makeStyles} from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 import TablaProducciones from "./TablaProducciones";
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import { fetchProductions } from '../redux';
+import { connect } from 'react-redux';
+
 
 //Estilos
-const styles = makeStyles( () => ({
+const styles = makeStyles( theme => ({
     container: {
         display: 'grid',
         gridTemplateRows: 'repeat(2, 1fr)',
@@ -24,12 +30,25 @@ const styles = makeStyles( () => ({
     },
     switchcito: {
         marginLeft: '2em'
-    }
+    },
+    root: {
+        width: '100%',
+        '& > * + *': {
+          marginTop: theme.spacing(2),
+        },
+      },
 }));
 
-const NewSearcher = props => {
+//Para el snackbar
+function Alert(props) {
+    return <MuiAlert elevation={8} variant="filled" {...props} />;
+}
+
+const NewSearcher = ( { prodData, fetchProductions } ) => {
 
     const classes = styles();
+
+    const [open, setOpen] = React.useState(false);
 
     // Valores iniciales del formulario de busqueda.
     const initialValues = {
@@ -37,20 +56,27 @@ const NewSearcher = props => {
         author: '',
         title: '',
         gender: '',
-        year: ''
+        descriptor: ''
     }
 
-    //Validación
-    const validationSchema = Yup.object({
-        general: Yup.string(),
-        author: Yup.string(),
-        title: Yup.string(),
-        gender: Yup.string(),
-        year: Yup.string(),
-    })
+    //manejar cuando se cierra el snack
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpen(false);
+    };
 
     const onSubmit = (values, onSubmitProps) => {
         console.log('Form Data', values);
+        console.log(onSubmitProps);
+
+        if(values.title !== '' && values.author === '' && values.gender === '' && values.descriptor === '') {
+            fetchProductions('produccion-titulo', values.title);
+        }else if(values.author !== '' && values.title === '' && values.gender === '' && values.descriptor === '') {
+            fetchProductions('produccion-autores', values.author);
+        }
+        
         onSubmitProps.setSubmitting(false);
         onSubmitProps.resetForm();
     };
@@ -66,7 +92,6 @@ const NewSearcher = props => {
 
     return (
         <div className={classes.container}>
-
             {/* Switch para seleccionar busqueda avanzada*/}
             <FormControlLabel
                 control={
@@ -84,7 +109,6 @@ const NewSearcher = props => {
 
             <Formik
                 initialValues={initialValues}
-                validationSchema={validationSchema}
                 onSubmit={onSubmit}>
                 {
                     formik => (
@@ -129,20 +153,19 @@ const NewSearcher = props => {
 
                                         <Field
                                             as={TextField}
-                                            label='Año de publicación'
-                                            id='year'
-                                            name='year'
+                                            label='Descriptores'
+                                            id='descriptor'
+                                            name='descriptor'
                                             variant='outlined'
                                         />
-
                                     </div>
-
+                                    
                             }
                             <br/>
                             <Button variant='contained' color="primary" type="submit"
                                     disabled={!(formik.isValid && formik.dirty) || formik.isSubmitting}>
                                 Buscar <SearchIcon style={{marginLeft: '0.5em'}}/>
-                            </Button>
+                            </Button> <br></br>-
                         </Form>
                     )
                 }
@@ -150,13 +173,40 @@ const NewSearcher = props => {
 
             <br/>
 
-            <div style={{margin: '2em'}}>
-                <TablaProducciones/>
-            </div>
+            {
+                prodData.loading ? <div style={{margin: '2em'}}> <CircularProgress /> </div> : prodData.productions.length !== 0 &&
+                <div style={{margin: '2em'}}>
+                    <TablaProducciones production={prodData.productions}/>
+                </div>
+            }
+
+            <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+                {
+                    prodData.productions.length === 0 ?
+                    <Alert onClose={handleClose} severity="info">
+                        No se encontraron producciones bibliograficas
+                    </Alert> :
+                    <Alert onClose={handleClose} severity="info">
+                        Se encontraron {prodData.productions.length} producciones bibliograficas
+                    </Alert>
+                }
+                
+            </Snackbar>            
 
         </div>
     )
 }
 
+const mapStateToProps = state => {
+    return {
+        prodData: state
+    }
+}
 
-export default NewSearcher;
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchProductions: (type, value) => dispatch(fetchProductions(type, value))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewSearcher);

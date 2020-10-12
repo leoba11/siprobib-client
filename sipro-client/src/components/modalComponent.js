@@ -63,7 +63,7 @@ const ModalComponent =  props => {
                     <h4> Categoría: </h4> <p style={{marginLeft: '1em'}}> {props.info.categoria.descripcion} </p>
                 </div>
                 <div >
-                    <h4> Autor: </h4> <p style={{marginLeft: '1em'}}> {props.info.autores[0].nombre + ' ' + props.info.autores[0].apellidos} </p>
+    <h4> Autor: </h4> <ul style={{marginLeft: '1em'}}>  {props.info.autores.map(autor => <li key={autor.idAutor}>{autor.nombre + ' ' + autor.apellidos}</li>)} </ul>
                 </div>
                 <div >
                     <h4> Año: </h4> <p style={{marginLeft: '1em'}}> {props.info.año} </p>
@@ -72,7 +72,7 @@ const ModalComponent =  props => {
                     <h4> Ubicación: </h4> <p style={{marginLeft: '1em'}}> {props.info.ubicacion.detalle} </p>
                 </div>
             </div>
-
+                <Button onClick={handleClose}  variant='contained' color="primary" > CERRAR </Button>
         </div>
     );
 
@@ -83,7 +83,7 @@ const ModalComponent =  props => {
             </Button>
             <Modal
                 open={open}
-                onClose={handleClose} >
+                 >
                 {body}
             </Modal>
         </div>
