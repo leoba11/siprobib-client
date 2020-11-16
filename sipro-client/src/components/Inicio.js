@@ -1,9 +1,8 @@
 import React from 'react'
 import {makeStyles} from '@material-ui/core/styles';
-import libraryy from './images/libraryy.jpg'
 import theme from './theme';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
-
+import library from './images/libraryy.jpg';
 const useStyles = makeStyles({
         hero: {
             position: 'relative',
@@ -19,7 +18,7 @@ const useStyles = makeStyles({
                 left: 0,
                 width: '100%',
                 height: '100%',
-                backgroundImage: "url(" + libraryy + ")",
+                backgroundImage: "url(" + library + ")",
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
@@ -56,12 +55,7 @@ const useStyles = makeStyles({
 
         buscadorPrincipal: {
             display: 'flex',
-        },
-
-        textField: {
-            // marginLeft: theme.spacing(1),
-            // marginRight: theme.spacing(1),
-        },
+        }
     }
 )
 

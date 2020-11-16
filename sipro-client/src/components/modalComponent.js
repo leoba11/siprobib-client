@@ -18,15 +18,16 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
-        width: 400,
+        width: 600,
         backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
+        border: '4px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
+        textAlign: 'center'
     },
     mod: {
         display: 'grid',
-        gridTemplateColumns: '200px 200px',
+        gridTemplateColumns: 'repeat(2, 1fr)',
         columnGap: '2em'
     }
 }));
@@ -51,25 +52,29 @@ const ModalComponent =  props => {
             <h2 id="simple-modal-title">{props.info.titulo}</h2>
             <div className={classes.mod}>
                 <div >
-                    <h4> Resumen: </h4> <p style={{marginLeft: '1em'}}> {props.info.resumen} </p>
+                    <h4> Resumen: </h4> <p> {props.info.resumen} </p>
                 </div>
                 <div >
-                    <h4 style={{marginRight: '1em'}} > Clasificación: </h4> <p style={{marginLeft: '1em'}}> {props.info.clasificacion} </p>
+                    <h4 > Clasificación: </h4> <p> {props.info.clasificacion} </p>
                 </div>
                 <div >
-                    <h4 > Dirección Web: </h4> <p style={{marginLeft: '1em'}}> {props.info.direccionWeb} </p>
+                    <h4 > Dirección Web: </h4> <p> {props.info.direccionWeb} </p>
                 </div>
                 <div >
-                    <h4> Categoría: </h4> <p style={{marginLeft: '1em'}}> {props.info.categoria.descripcion} </p>
+                    <h4> Categoría: </h4> <p> {props.info.categoria.descripcion} </p>
                 </div>
                 <div >
-    <h4> Autor: </h4> <ul style={{marginLeft: '1em'}}>  {props.info.autores.map(autor => <li key={autor.idAutor}>{autor.nombre + ' ' + autor.apellidos}</li>)} </ul>
+                    <h4> Autor: </h4>   <ul> { props.info.autores.map(autor => 
+                                            <li key={autor.idAutor}>
+                                                {autor.nombre + ' ' + autor.apellidos}
+                                            </li>) } 
+                                        </ul>
                 </div>
                 <div >
-                    <h4> Año: </h4> <p style={{marginLeft: '1em'}}> {props.info.año} </p>
+                    <h4> Año: </h4> <p> {props.info.año} </p>
                 </div>
                 <div >
-                    <h4> Ubicación: </h4> <p style={{marginLeft: '1em'}}> {props.info.ubicacion.detalle} </p>
+                    <h4> Ubicación: </h4> <p> {props.info.ubicacion.detalle} </p>
                 </div>
             </div>
                 <Button onClick={handleClose}  variant='contained' color="primary" > CERRAR </Button>
@@ -81,9 +86,7 @@ const ModalComponent =  props => {
             <Button onClick={handleOpen}>
                 <InfoIcon />
             </Button>
-            <Modal
-                open={open}
-                 >
+            <Modal open={open}>
                 {body}
             </Modal>
         </div>

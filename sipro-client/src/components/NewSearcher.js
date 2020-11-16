@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 
 //Imports para el form
-import {Formik, Form, Field} from "formik";
+import {Formik, Form} from "formik";
+import FormikControl from "./FormikControl";
 
 //Imports de Material UI
-import {Button, FormControlLabel, Switch, TextField, makeStyles} from "@material-ui/core";
+import {Button, FormControlLabel, Switch, makeStyles} from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 import TablaProducciones from "./TablaProducciones";
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { fetchProductions } from '../redux';
+//Imports para Redux
+import { fetchGeneralProductions, fetchProductions } from '../redux';
 import { connect } from 'react-redux';
 
 
@@ -19,14 +21,18 @@ import { connect } from 'react-redux';
 const styles = makeStyles( theme => ({
     container: {
         display: 'grid',
-        gridTemplateRows: 'repeat(2, 1fr)',
+        paddingTop: '3em'
     },
     formcito: {
         display: 'grid',
         gridTemplateColumns: 'repeat(4,1fr)',
+        gridTemplateRows: 'repeat(2,1fr)',
         gridGap: '2em',
         marginLeft: '2em',
         marginRight: '2em'
+    },
+    andOr: {
+        gridColumn: '1/5'
     },
     switchcito: {
         marginLeft: '2em'
@@ -44,19 +50,25 @@ function Alert(props) {
     return <MuiAlert elevation={8} variant="filled" {...props} />;
 }
 
-const NewSearcher = ( { prodData, fetchProductions } ) => {
+const NewSearcher = ( { prodData, fetchProductions, fetchGeneralProductions } ) => {
 
     const classes = styles();
 
     const [open, setOpen] = React.useState(false);
 
+    const radioOptions = [
+        { key: 'AND', value: 'and' },
+        { key: 'OR', value: 'or'}
+	]
+
     // Valores iniciales del formulario de busqueda.
     const initialValues = {
+        tipo: 'and',
         general: '',
-        author: '',
-        title: '',
-        gender: '',
-        descriptor: ''
+        titulo: '',
+        autor: '',
+        fecha: 0,
+        categoria: ''
     }
 
     //manejar cuando se cierra el snack
@@ -68,15 +80,16 @@ const NewSearcher = ( { prodData, fetchProductions } ) => {
     };
 
     const onSubmit = (values, onSubmitProps) => {
-        console.log('Form Data', values);
-        console.log(onSubmitProps);
+        //console.log('Form Data', values);
+        //console.log(onSubmitProps);
 
-        if(values.title !== '' && values.author === '' && values.gender === '' && values.descriptor === '') {
-            fetchProductions('produccion-titulo', values.title);
-        }else if(values.author !== '' && values.title === '' && values.gender === '' && values.descriptor === '') {
-            fetchProductions('produccion-autores', values.author);
-        }
-        
+		if(type.checkedA) {
+			fetchProductions(values);
+		}else {
+			fetchGeneralProductions(values.general);
+		}
+		
+        setOpen(true);
         onSubmitProps.setSubmitting(false);
         onSubmitProps.resetForm();
     };
@@ -106,66 +119,68 @@ const NewSearcher = ( { prodData, fetchProductions } ) => {
                 }
                 label='Busqueda Avanzada'
             />
+            <br></br>
 
             <Formik
-                initialValues={initialValues}
+				initialValues={initialValues}
                 onSubmit={onSubmit}>
                 {
                     formik => (
                         <Form>
-
                             {
                                 !type.checkedA ?
                                     <div>
-                                        <Field
-                                            as={TextField}
+
+                                        <FormikControl 
                                             label='Búsqueda General'
-                                            id='general'
+                                            control='input'
                                             name='general'
-                                            variant='outlined'
                                         />
+
                                     </div> :
                                     <div className={classes.formcito}>
-                                        <Field
-                                            as={TextField}
-                                            label='Autor'
-                                            id='author'
-                                            name='author'
-                                            variant='outlined'
-                                        />
-
-
-                                        <Field
-                                            as={TextField}
-                                            label='Título del libro'
-                                            id='title'
-                                            name='title'
-                                            variant='outlined'
-                                        />
-
-                                        <Field
-                                            as={TextField}
-                                            label='Género'
-                                            id='gender'
-                                            name='gender'
-                                            variant='outlined'
-                                        />
-
-                                        <Field
-                                            as={TextField}
-                                            label='Descriptores'
-                                            id='descriptor'
-                                            name='descriptor'
-                                            variant='outlined'
-                                        />
-                                    </div>
                                     
+                                        <div className={classes.andOr}>
+                                            <FormikControl
+                                                control='radio'
+                                                name='tipo'
+                                                options={radioOptions} 
+                                            /> 
+                                        </div>
+                                            
+										<FormikControl 
+											label='Título del libro'
+											control='input'
+											name='titulo'
+										/>
+
+										<FormikControl 
+											label='Autor'
+											control='input'
+											name='autor'
+										/>
+
+										<FormikControl 
+											label='Año de publicación'
+											type='number'
+											control='input'
+											name='fecha'
+										/>
+
+										<FormikControl 
+											label='Categoría'
+											control='input'
+											name='categoria'
+										/>
+                                       
+                                    </div>        
                             }
-                            <br/>
+                            <br></br>
+							<br></br>
                             <Button variant='contained' color="primary" type="submit"
-                                    disabled={!(formik.isValid && formik.dirty) || formik.isSubmitting}>
+                                    disabled={!(formik.isValid && formik.dirty) || formik.isSubmitting} >
                                 Buscar <SearchIcon style={{marginLeft: '0.5em'}}/>
-                            </Button> <br></br>-
+                            </Button> <br></br>
                         </Form>
                     )
                 }
@@ -205,7 +220,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchProductions: (type, value) => dispatch(fetchProductions(type, value))
+		fetchProductions: (body) => dispatch(fetchProductions(body)),
+		fetchGeneralProductions: (word) => dispatch(fetchGeneralProductions(word))
     }
 }
 

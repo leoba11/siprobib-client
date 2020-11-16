@@ -3,7 +3,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 export default createMuiTheme({
     palette: {
       primary: {
-        main: '#204c6f',//'#204c6f',#202020
+        main: '#204c6f',
         contrastText: '#fff',
       },
       secondary: {
@@ -13,14 +13,6 @@ export default createMuiTheme({
     },
     status: {
       danger: 'orange',
-    },
-    /*body: {
-      display: 'flex',
-      minHeight: '100vh',
-      flexDirection: 'column',
-      margin: 0,
-      padding: 0,
-    },*/    
-  
+    }
   });
   

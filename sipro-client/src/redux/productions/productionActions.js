@@ -1,14 +1,21 @@
 import client from '../../components/axiosClient';
 
 import { 
-    FETCH_PROD_BY_TITLE_REQUEST, 
+    FETCH_PROD_BY_FILTER_REQ, 
+    FETCH_PROD_GENERAL_REQ,
     FETCH_PROD_SUCCESS, 
     FETCH_PROD_FAILURE } from './productionsTypes';
 
 
-const fetchProdByTitleRequest = () => {
+const fetchProdByFilterRequest = () => {
     return {
-        type: FETCH_PROD_BY_TITLE_REQUEST
+        type: FETCH_PROD_BY_FILTER_REQ
+    }
+}
+
+const fetchProductionsByGeneral = () => {
+    return {
+        type: FETCH_PROD_GENERAL_REQ
     }
 }
 
@@ -26,11 +33,11 @@ const fetchProdFailure = error => {
     }
 }
 
-export const fetchProductions = (type, value) => {
-    
+export const fetchProductions = (body) => {
+      
     return dispatch => {
-        dispatch(fetchProdByTitleRequest());
-        client.get(`/${type}/${value}`)
+        dispatch( fetchProdByFilterRequest() );
+        client.post(`/filtro`, body )
             .then(res => {
                 const productions = res.data;
                 dispatch(fetchProdSuccess(productions));
@@ -42,3 +49,17 @@ export const fetchProductions = (type, value) => {
         }
 }
 
+export const fetchGeneralProductions = (word) => {
+    return dispatch => {
+        dispatch( fetchProductionsByGeneral() );
+        client.get(`/filtro/general/${word}`)
+        .then(res => {
+            const productions = res.data;
+            dispatch(fetchProdSuccess(productions));
+        }).catch(error => {
+            const errorMsg = error.message;
+            console.log(error);
+            dispatch(fetchProdFailure(errorMsg));
+        })
+    }
+ }

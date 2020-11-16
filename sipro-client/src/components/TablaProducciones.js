@@ -13,7 +13,7 @@ import ModalComponent from "./modalComponent";
 const columns = [
     { id: 'titulo', label: 'Nombre', align: 'center'},
     { id: 'direccionWeb', label: 'Direccion', align: 'center'},
-    { id: 'clasificacion', label: 'Género', align: 'center'},
+    { id: 'clasificacion', label: 'Clasificacion', align: 'center'},
     { id: 'año', label: 'Año de publicación', align: 'center'},
     { id: 'informacion', label: '', align: 'center'}
 ];
